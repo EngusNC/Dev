@@ -36,7 +36,7 @@
 
             <div class="nav__cta">
                 <a href="contact.html" class="btn btn--secondary">Nous contacter</a>
-                <a href="index.html#demo" class="btn btn--primary">Demander une démo<span class="btn__arrow">→</span></a>
+                <a href="contact.html?sujet=demo" class="btn btn--primary">Accès anticipé<span class="btn__arrow">→</span></a>
             </div>
 
             <button class="nav__mobile-toggle" id="mobileToggle" aria-label="Menu">
@@ -116,11 +116,11 @@
                         <label class="form-label" for="sujet">Sujet</label>
                         <select class="form-select" id="sujet" name="Sujet" required>
                             <option value="" disabled selected>Choisissez un sujet</option>
+                            <option value="Programme Early Adopter">Programme Early Adopter</option>
                             <option value="Demande de démo">Demande de démo</option>
-                            <option value="Informations tarifaires">Informations tarifaires</option>
-                            <option value="Question technique">Question technique</option>
+                            <option value="Participer à une interview">Participer à une interview utilisateur</option>
                             <option value="Partenariat">Partenariat</option>
-                            <option value="Autre">Autre</option>
+                            <option value="Question générale">Question générale</option>
                         </select>
                     </div>
 
@@ -157,12 +157,12 @@
                     <li><a href="index.html#fonctionnalites">Fonctionnalités</a></li>
                     <li><a href="index.html#avantages">Avantages</a></li>
                     <li><a href="contact.html">Contact</a></li>
-                    <li><a href="#">Mentions légales</a></li>
+                    <li><a href="mentions-legales.html">Mentions légales</a></li>
                 </ul>
             </div>
 
             <p class="footer__copy">
-                © 2025 ALVEA — Une solution <a href="#">NEXORA</a> · L'excellence opérationnelle, simple et accessible.
+                © 2026 ALVEA — Une solution <a href="#">NEXORA</a> · L'excellence opérationnelle, simple et accessible.
             </p>
         </div>
     </footer>
@@ -188,6 +188,24 @@
 
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
+        // ——— Prefill subject from URL params ———
+        const params = new URLSearchParams(window.location.search);
+        const sujetParam = params.get('sujet');
+        if (sujetParam) {
+            const sujetSelect = document.getElementById('sujet');
+            const mapping = {
+                'demo': 'Demande de démo',
+                'early': 'Programme Early Adopter',
+                'interview': 'Participer à une interview'
+            };
+            const value = mapping[sujetParam];
+            if (value && sujetSelect) {
+                for (const opt of sujetSelect.options) {
+                    if (opt.value === value) { opt.selected = true; break; }
+                }
+            }
+        }
+
         // ——— Set _next redirect to current page with success param ———
         const nextInput = document.querySelector('input[name="_next"]');
         if (nextInput) {
@@ -195,7 +213,7 @@
         }
 
         // ——— Show success message if redirected after send ———
-        if (new URLSearchParams(window.location.search).get('sent') === '1') {
+        if (params.get('sent') === '1') {
             const form = document.getElementById('contactForm');
             if (form) {
                 form.innerHTML = '<div class="contact__success visible">' +
