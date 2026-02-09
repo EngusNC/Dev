@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact — ALVEA</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+    <!-- ═══════════════ NAVBAR ═══════════════ -->
+    <nav class="nav scrolled" id="nav">
+        <div class="container nav__inner">
+            <a href="index.html" class="nav__logo">
+                <svg class="nav__logo-icon" viewBox="0 0 40 40" fill="none">
+                    <path d="M20 2L36.66 11.5V30.5L20 40L3.34 30.5V11.5L20 2Z" fill="#10B981" opacity="0.12"/>
+                    <path d="M20 8L30.39 14V26L20 32L9.61 26V14L20 8Z" fill="#10B981" opacity="0.25"/>
+                    <path d="M20 14L24.33 16.5V21.5L20 24L15.67 21.5V16.5L20 14Z" fill="#10B981"/>
+                    <circle cx="20" cy="11" r="2.5" fill="#10B981"/>
+                    <circle cx="27" cy="15" r="2" fill="#059669"/>
+                    <circle cx="27" cy="25" r="2" fill="#34D399" opacity="0.6"/>
+                    <circle cx="13" cy="15" r="2" fill="#059669" opacity="0.7"/>
+                </svg>
+                <span class="nav__logo-text">ALVEA</span>
+            </a>
+
+            <ul class="nav__links">
+                <li><a href="index.html#solution">Solution</a></li>
+                <li><a href="index.html#modules">Modules</a></li>
+                <li><a href="index.html#avantages">Avantages</a></li>
+                <li><a href="index.html#audience">Pour qui</a></li>
+            </ul>
+
+            <div class="nav__cta">
+                <a href="contact.html" class="btn btn--secondary">Nous contacter</a>
+                <a href="index.html#demo" class="btn btn--primary">Demander une démo<span class="btn__arrow">→</span></a>
+            </div>
+
+            <button class="nav__mobile-toggle" id="mobileToggle" aria-label="Menu">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="3" y1="6" x2="21" y2="6"/>
+                    <line x1="3" y1="12" x2="21" y2="12"/>
+                    <line x1="3" y1="18" x2="21" y2="18"/>
+                </svg>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ═══════════════ CONTACT ═══════════════ -->
+    <section class="contact">
+        <div class="contact__bg">
+            <div class="contact__gradient contact__gradient--1"></div>
+            <div class="contact__gradient contact__gradient--2"></div>
+        </div>
+
+        <div class="container contact__content">
+            <div class="contact__info reveal">
+                <p class="section-label">Contact</p>
+                <h1 class="section-title">Parlons de votre projet HSE</h1>
+                <p class="section-subtitle">Une question, une demande de démo ou un besoin spécifique ? Notre équipe vous répond sous 24 heures.</p>
+
+                <div class="contact__details">
+                    <div class="contact__detail">
+                        <div class="contact__detail-icon">📧</div>
+                        <div>
+                            <div class="contact__detail-title">Email</div>
+                            <div class="contact__detail-text">
+                                <a href="mailto:nicolas.couvreur@alvea.tech">nicolas.couvreur@alvea.tech</a><br>
+                                <a href="mailto:enguerrand.thomas@alvea.tech">enguerrand.thomas@alvea.tech</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="contact__detail">
+                        <div class="contact__detail-icon">📍</div>
+                        <div>
+                            <div class="contact__detail-title">Localisation</div>
+                            <div class="contact__detail-text">France</div>
+                        </div>
+                    </div>
+                    <div class="contact__detail">
+                        <div class="contact__detail-icon">⚡</div>
+                        <div>
+                            <div class="contact__detail-title">Temps de réponse</div>
+                            <div class="contact__detail-text">Sous 24 heures ouvrées</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contact__form-card reveal reveal-delay-1">
+                <h2 class="contact__form-title">Envoyez-nous un message</h2>
+                <p class="contact__form-subtitle">Remplissez le formulaire ci-dessous et nous reviendrons vers vous rapidement.</p>
+
+                <form class="contact__form" id="contactForm" action="https://formsubmit.co/nicolas.couvreur@alvea.tech" method="POST">
+                    <!-- FormSubmit config -->
+                    <input type="hidden" name="_cc" value="enguerrand.thomas@alvea.tech">
+                    <input type="hidden" name="_subject" value="Nouveau message depuis alvea.tech">
+                    <input type="hidden" name="_captcha" value="true">
+                    <input type="hidden" name="_template" value="table">
+                    <input type="hidden" name="_next" value="">
+                    <input type="text" name="_honey" style="display:none">
+
+                    <div class="form-group--row">
+                        <div class="form-group">
+                            <label class="form-label" for="prenom">Prénom</label>
+                            <input class="form-input" type="text" id="prenom" name="Prénom" placeholder="Votre prénom" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="nom">Nom</label>
+                            <input class="form-input" type="text" id="nom" name="Nom" placeholder="Votre nom" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group--row">
+                        <div class="form-group">
+                            <label class="form-label" for="email">Email professionnel</label>
+                            <input class="form-input" type="email" id="email" name="Email" placeholder="vous@entreprise.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="telephone">Téléphone</label>
+                            <input class="form-input" type="tel" id="telephone" name="Téléphone" placeholder="+33 6 00 00 00 00">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="entreprise">Entreprise</label>
+                        <input class="form-input" type="text" id="entreprise" name="Entreprise" placeholder="Nom de votre entreprise" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="sujet">Sujet</label>
+                        <select class="form-select" id="sujet" name="Sujet" required>
+                            <option value="" disabled selected>Choisissez un sujet</option>
+                            <option value="Demande de démo">Demande de démo</option>
+                            <option value="Informations tarifaires">Informations tarifaires</option>
+                            <option value="Question technique">Question technique</option>
+                            <option value="Partenariat">Partenariat</option>
+                            <option value="Autre">Autre</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="message">Message</label>
+                        <textarea class="form-textarea" id="message" name="Message" placeholder="Décrivez votre besoin, la taille de votre entreprise, vos enjeux HSE..." required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn--primary btn--large">
+                        Envoyer le message
+                        <span class="btn__arrow">→</span>
+                    </button>
+
+                    <p class="contact__form-note">En soumettant ce formulaire, vous acceptez d'être contacté par l'équipe ALVEA.</p>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════ FOOTER ═══════════════ -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__inner">
+                <div class="footer__brand">
+                    <svg width="28" height="28" viewBox="0 0 40 40" fill="none">
+                        <path d="M20 8L30.39 14V26L20 32L9.61 26V14L20 8Z" fill="#10B981" opacity="0.3"/>
+                        <path d="M20 14L24.33 16.5V21.5L20 24L15.67 21.5V16.5L20 14Z" fill="#10B981"/>
+                    </svg>
+                    <span class="footer__brand-text">ALVEA</span>
+                </div>
+
+                <ul class="footer__links">
+                    <li><a href="index.html#solution">Solution</a></li>
+                    <li><a href="index.html#modules">Modules</a></li>
+                    <li><a href="index.html#audience">Pour qui</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="#">Mentions légales</a></li>
+                </ul>
+            </div>
+
+            <p class="footer__copy">
+                © 2025 ALVEA — Une solution <a href="#">NEXORA</a> · L'excellence opérationnelle, simple et accessible.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // ——— Navbar scroll effect ———
+        const nav = document.getElementById('nav');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 40) {
+                nav.classList.add('scrolled');
+            }
+        });
+
+        // ——— Reveal on scroll ———
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // ——— Set _next redirect to current page with success param ———
+        const nextInput = document.querySelector('input[name="_next"]');
+        if (nextInput) {
+            nextInput.value = window.location.href.split('?')[0] + '?sent=1';
+        }
+
+        // ——— Show success message if redirected after send ———
+        if (new URLSearchParams(window.location.search).get('sent') === '1') {
+            const form = document.getElementById('contactForm');
+            if (form) {
+                form.innerHTML = '<div class="contact__success visible">' +
+                    '<div class="contact__success-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg></div>' +
+                    '<h3 class="contact__success-title">Message envoyé avec succès !</h3>' +
+                    '<p class="contact__success-text">Merci pour votre message. Notre équipe vous répondra sous 24 heures ouvrées.</p>' +
+                    '</div>';
+            }
+        }
+    </script>
+</body>
+</html>
