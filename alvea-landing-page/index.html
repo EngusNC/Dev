@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALVEA — L'excellence opérationnelle, simple et accessible</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+    <!-- ═══════════════ NAVBAR ═══════════════ -->
+    <nav class="nav" id="nav">
+        <div class="container nav__inner">
+            <a href="#" class="nav__logo">
+                <svg class="nav__logo-icon" viewBox="0 0 40 40" fill="none">
+                    <path d="M20 2L36.66 11.5V30.5L20 40L3.34 30.5V11.5L20 2Z" fill="#10B981" opacity="0.12"/>
+                    <path d="M20 8L30.39 14V26L20 32L9.61 26V14L20 8Z" fill="#10B981" opacity="0.25"/>
+                    <path d="M20 14L24.33 16.5V21.5L20 24L15.67 21.5V16.5L20 14Z" fill="#10B981"/>
+                    <circle cx="20" cy="11" r="2.5" fill="#10B981"/>
+                    <circle cx="27" cy="15" r="2" fill="#059669"/>
+                    <circle cx="27" cy="25" r="2" fill="#34D399" opacity="0.6"/>
+                    <circle cx="13" cy="15" r="2" fill="#059669" opacity="0.7"/>
+                </svg>
+                <span class="nav__logo-text">ALVEA</span>
+            </a>
+
+            <ul class="nav__links">
+                <li><a href="#solution">Solution</a></li>
+                <li><a href="#modules">Modules</a></li>
+                <li><a href="#avantages">Avantages</a></li>
+                <li><a href="#audience">Pour qui</a></li>
+            </ul>
+
+            <div class="nav__cta">
+                <a href="#contact" class="btn btn--secondary">Nous contacter</a>
+                <a href="#demo" class="btn btn--primary">Demander une démo<span class="btn__arrow">→</span></a>
+            </div>
+
+            <button class="nav__mobile-toggle" id="mobileToggle" aria-label="Menu">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="3" y1="6" x2="21" y2="6"/>
+                    <line x1="3" y1="12" x2="21" y2="12"/>
+                    <line x1="3" y1="18" x2="21" y2="18"/>
+                </svg>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ═══════════════ HERO ═══════════════ -->
+    <section class="hero" id="hero">
+        <div class="hero__bg">
+            <div class="hero__gradient hero__gradient--1"></div>
+            <div class="hero__gradient hero__gradient--2"></div>
+        </div>
+
+        <!-- Floating hexagons -->
+        <svg class="hero__hex hero__hex--1" width="120" height="104" viewBox="0 0 120 104">
+            <polygon points="60,2 118,28 118,76 60,102 2,76 2,28"/>
+        </svg>
+        <svg class="hero__hex hero__hex--2" width="80" height="70" viewBox="0 0 120 104">
+            <polygon points="60,2 118,28 118,76 60,102 2,76 2,28"/>
+        </svg>
+        <svg class="hero__hex hero__hex--3" width="150" height="130" viewBox="0 0 120 104">
+            <polygon points="60,2 118,28 118,76 60,102 2,76 2,28"/>
+        </svg>
+        <svg class="hero__hex hero__hex--4" width="60" height="52" viewBox="0 0 120 104">
+            <polygon points="60,2 118,28 118,76 60,102 2,76 2,28"/>
+        </svg>
+        <svg class="hero__hex hero__hex--5" width="90" height="78" viewBox="0 0 120 104">
+            <polygon points="60,2 118,28 118,76 60,102 2,76 2,28"/>
+        </svg>
+
+        <div class="container hero__content">
+            <div class="hero__text">
+                <div class="hero__badge">
+                    <span class="badge badge--emerald">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12,2 22,8.5 22,15.5 12,22 2,15.5 2,8.5"/></svg>
+                        Plateforme HSE nouvelle génération
+                    </span>
+                </div>
+
+                <h1 class="hero__title">
+                    Votre conformité HSE,<br>
+                    <span class="highlight">simple et accessible.</span>
+                </h1>
+
+                <p class="hero__desc">
+                    Déclaration d'incidents en 60 secondes, reporting automatisé, conformité réglementaire simplifiée. ALVEA digitalise l'excellence opérationnelle pour les entreprises de toute taille.
+                </p>
+
+                <div class="hero__actions">
+                    <a href="#demo" class="btn btn--primary btn--large">
+                        Demander une démo gratuite
+                        <span class="btn__arrow">→</span>
+                    </a>
+                    <a href="#solution" class="btn btn--secondary btn--large">
+                        Découvrir la solution
+                    </a>
+                </div>
+
+                <div class="hero__proof">
+                    <div class="hero__avatars">
+                        <div class="hero__avatar hero__avatar--1">NC</div>
+                        <div class="hero__avatar hero__avatar--2">ET</div>
+                        <div class="hero__avatar hero__avatar--3">JD</div>
+                        <div class="hero__avatar hero__avatar--4">+</div>
+                    </div>
+                    <p class="hero__proof-text">
+                        <strong>Conçu avec des professionnels HSE</strong><br>
+                        pour le terrain industriel
+                    </p>
+                </div>
+            </div>
+
+            <div class="hero__visual">
+                <div class="hero__mockup">
+                    <div class="mockup__header">
+                        <span class="mockup__dot mockup__dot--r"></span>
+                        <span class="mockup__dot mockup__dot--y"></span>
+                        <span class="mockup__dot mockup__dot--g"></span>
+                        <span class="mockup__url">app.alvea.tech/dashboard</span>
+                    </div>
+                    <div class="mockup__body">
+                        <div class="mockup__topbar">
+                            <div class="mockup__brand">ALVEA <span>Safety+</span></div>
+                            <div class="mockup__tabs">
+                                <div class="mockup__tab mockup__tab--active">Dashboard</div>
+                                <div class="mockup__tab">Incidents</div>
+                                <div class="mockup__tab">Rapports</div>
+                            </div>
+                        </div>
+                        <div class="mockup__stats">
+                            <div class="mockup__stat">
+                                <div class="mockup__stat-value mockup__stat-value--green" id="counter1">0</div>
+                                <div class="mockup__stat-label">Jours sans incident</div>
+                            </div>
+                            <div class="mockup__stat">
+                                <div class="mockup__stat-value mockup__stat-value--blue" id="counter2">0</div>
+                                <div class="mockup__stat-label">Inspections ce mois</div>
+                            </div>
+                            <div class="mockup__stat">
+                                <div class="mockup__stat-value mockup__stat-value--orange" id="counter3">0%</div>
+                                <div class="mockup__stat-label">Taux de conformité</div>
+                            </div>
+                        </div>
+                        <div class="mockup__chart">
+                            <div class="mockup__chart-title">Tendance incidents — 8 dernières semaines</div>
+                            <div class="mockup__bars">
+                                <div class="mockup__bar"></div>
+                                <div class="mockup__bar"></div>
+                                <div class="mockup__bar"></div>
+                                <div class="mockup__bar"></div>
+                                <div class="mockup__bar"></div>
+                                <div class="mockup__bar"></div>
+                                <div class="mockup__bar"></div>
+                                <div class="mockup__bar"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hero__notif">
+                    <div class="hero__notif-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg>
+                    </div>
+                    <div>
+                        <div class="hero__notif-text">Incident déclaré avec succès</div>
+                        <div class="hero__notif-sub">Analyse IA en cours · 60s</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════ SOCIAL PROOF ═══════════════ -->
+    <div class="proof-bar reveal">
+        <div class="container proof-bar__inner">
+            <span class="proof-bar__label">Pensé pour l'industrie</span>
+            <div class="proof-bar__logos">
+                <span class="proof-bar__logo">Pétrole & Gaz</span>
+                <span class="proof-bar__logo">BTP</span>
+                <span class="proof-bar__logo">Industrie</span>
+                <span class="proof-bar__logo">Énergie</span>
+                <span class="proof-bar__logo">Logistique</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════ PROBLEMS ═══════════════ -->
+    <section class="problems" id="problemes">
+        <div class="container">
+            <div class="problems__header reveal">
+                <p class="section-label">Le constat</p>
+                <h2 class="section-title">Le reporting HSE est encore<br>trop souvent artisanal</h2>
+                <p class="section-subtitle">Les entreprises perdent du temps, de l'argent et exposent leurs équipes à des risques évitables à cause de processus manuels obsolètes.</p>
+            </div>
+
+            <div class="problems__grid">
+                <div class="problem-card reveal reveal-delay-1">
+                    <div class="problem-card__icon problem-card__icon--red">⏱️</div>
+                    <h3 class="problem-card__title">Reporting lent et chronophage</h3>
+                    <p class="problem-card__desc">Formulaires papier, ressaisies manuelles, fichiers Excel éparpillés. Un incident simple demande parfois plusieurs heures de traitement administratif.</p>
+                    <div class="problem-card__stat">
+                        <strong>72%</strong> des entreprises utilisent encore des formulaires papier
+                    </div>
+                </div>
+
+                <div class="problem-card reveal reveal-delay-2">
+                    <div class="problem-card__icon problem-card__icon--orange">⚠️</div>
+                    <h3 class="problem-card__title">Non-conformité réglementaire</h3>
+                    <p class="problem-card__desc">DUERP obsolètes, audits ISO 45001 redoutés, traçabilité insuffisante. Les sanctions financières et pénales sont réelles et croissantes.</p>
+                    <div class="problem-card__stat">
+                        <strong>€10K-150K</strong> d'amendes par manquement constaté
+                    </div>
+                </div>
+
+                <div class="problem-card reveal reveal-delay-3">
+                    <div class="problem-card__icon problem-card__icon--yellow">📊</div>
+                    <h3 class="problem-card__title">Données silotées et inexploitées</h3>
+                    <p class="problem-card__desc">Aucune vision consolidée. Les indicateurs de sécurité arrivent trop tard pour être actionnables et prévenir les accidents graves.</p>
+                    <div class="problem-card__stat">
+                        <strong>85%</strong> des presqu'accidents ne sont jamais déclarés
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════ SOLUTION ═══════════════ -->
+    <section class="solution" id="solution">
+        <!-- Background hexagons -->
+        <svg class="solution__bg-hex solution__bg-hex--1" width="300" height="260" viewBox="0 0 120 104">
+            <polygon points="60,2 118,28 118,76 60,102 2,76 2,28"/>
+        </svg>
+        <svg class="solution__bg-hex solution__bg-hex--2" width="400" height="346" viewBox="0 0 120 104">
+            <polygon points="60,2 118,28 118,76 60,102 2,76 2,28"/>
+        </svg>
+
+        <div class="container">
+            <div class="solution__header reveal">
+                <p class="section-label" style="color: var(--emerald-light);">Comment ça marche</p>
+                <h2 class="section-title">Trois étapes vers l'excellence opérationnelle</h2>
+                <p class="section-subtitle">De la déclaration terrain au tableau de bord direction, ALVEA automatise votre chaîne de valeur HSE.</p>
+            </div>
+
+            <div class="solution__steps">
+                <div class="step reveal reveal-delay-1">
+                    <div class="step__number">1</div>
+                    <h3 class="step__title">Déclarez en 60 secondes</h3>
+                    <p class="step__desc">Photo, message vocal ou texte via Telegram. L'IA analyse automatiquement le contenu et extrait les données structurées : type d'incident, gravité, localisation, mesures prises.</p>
+                </div>
+
+                <div class="step reveal reveal-delay-2">
+                    <div class="step__number">2</div>
+                    <h3 class="step__title">Analyse IA instantanée</h3>
+                    <p class="step__desc">ALVEA complète automatiquement les champs manquants, catégorise l'incident selon les normes en vigueur et génère le rapport conforme aux exigences réglementaires.</p>
+                </div>
+
+                <div class="step reveal reveal-delay-3">
+                    <div class="step__number">3</div>
+                    <h3 class="step__title">Dashboard & conformité</h3>
+                    <p class="step__desc">Tableau de bord en temps réel, KPI sécurité automatisés, rapports DUERP prêts à l'emploi. Votre préparation ISO 45001 passe de 3 semaines à 2 heures.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════ MODULES ═══════════════ -->
+    <section class="modules" id="modules">
+        <div class="container">
+            <div class="modules__header reveal">
+                <p class="section-label">Écosystème modulaire</p>
+                <h2 class="section-title">Une suite complète, module par module</h2>
+                <p class="section-subtitle">Chaque module est indépendant mais interconnecté. Commencez avec ce dont vous avez besoin, évoluez à votre rythme.</p>
+            </div>
+
+            <div class="modules__grid">
+                <!-- Featured: Safety+ -->
+                <div class="module-card module-card--safety module-card--featured reveal">
+                    <div class="module-card__accent"></div>
+                    <div>
+                        <div class="module-card__header">
+                            <h3 class="module-card__name">ALVEA Safety+</h3>
+                            <span class="module-card__tag">Module phare</span>
+                        </div>
+                        <p class="module-card__desc">Déclaration d'incidents en 60 secondes, analyse IA multimodale (photo, voix, texte), reporting DUERP automatisé. Le cœur de votre conformité HSE digitalisée.</p>
+                        <p class="module-card__metric">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23,6 13.5,15.5 8.5,10.5 1,18"/></svg>
+                            Réduction 90% du temps de déclaration
+                        </p>
+                    </div>
+                    <div class="module-card__visual">
+                        <div class="module-card__form-preview">
+                            <div class="form-row">
+                                <div class="form-row__icon form-row__icon--green">📷</div>
+                                <div class="form-row__content">
+                                    <div class="form-row__label">Photo incident</div>
+                                    <div class="form-row__value">Analysée par IA</div>
+                                </div>
+                                <div class="form-row__check">✓</div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-row__icon form-row__icon--blue">🎤</div>
+                                <div class="form-row__content">
+                                    <div class="form-row__label">Description vocale</div>
+                                    <div class="form-row__value">Transcrite et structurée</div>
+                                </div>
+                                <div class="form-row__check">✓</div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-row__icon form-row__icon--orange">📋</div>
+                                <div class="form-row__content">
+                                    <div class="form-row__label">Rapport DUERP</div>
+                                    <div class="form-row__value">Généré automatiquement</div>
+                                </div>
+                                <div class="form-row__check">✓</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Permits+ -->
+                <div class="module-card module-card--permits reveal reveal-delay-1">
+                    <div class="module-card__accent"></div>
+                    <div class="module-card__header">
+                        <h3 class="module-card__name">ALVEA Permits+</h3>
+                        <span class="module-card__tag">Processus</span>
+                    </div>
+                    <p class="module-card__desc">Validation des permis de travail en 4h au lieu de 2 jours. Traçabilité garantie sur 10 ans pour tous types de permis.</p>
+                    <p class="module-card__metric">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23,6 13.5,15.5 8.5,10.5 1,18"/></svg>
+                        Validation 8x plus rapide
+                    </p>
+                </div>
+
+                <!-- Scaffold Pro -->
+                <div class="module-card module-card--scaffold reveal reveal-delay-2">
+                    <div class="module-card__accent"></div>
+                    <div class="module-card__header">
+                        <h3 class="module-card__name">ALVEA Scaffold Pro</h3>
+                        <span class="module-card__tag">Technique</span>
+                    </div>
+                    <p class="module-card__desc">Réduction de 60% du temps de montage. Capitalisation totale des designs validés et suivi de conformité en temps réel.</p>
+                    <p class="module-card__metric">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23,6 13.5,15.5 8.5,10.5 1,18"/></svg>
+                        -60% temps montage
+                    </p>
+                </div>
+
+                <!-- Lift Pro -->
+                <div class="module-card module-card--lift reveal reveal-delay-3">
+                    <div class="module-card__accent"></div>
+                    <div class="module-card__header">
+                        <h3 class="module-card__name">ALVEA Lift Pro</h3>
+                        <span class="module-card__tag">Critique</span>
+                    </div>
+                    <p class="module-card__desc">100% des plans de levage validés, zéro opération critique sans certification. Sécurité maximale sur les opérations les plus sensibles.</p>
+                    <p class="module-card__metric">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23,6 13.5,15.5 8.5,10.5 1,18"/></svg>
+                        100% plans certifiés
+                    </p>
+                </div>
+
+                <!-- Compliance+ -->
+                <div class="module-card module-card--compliance reveal reveal-delay-4">
+                    <div class="module-card__accent"></div>
+                    <div class="module-card__header">
+                        <h3 class="module-card__name">ALVEA Compliance+</h3>
+                        <span class="module-card__tag">Transverse</span>
+                    </div>
+                    <p class="module-card__desc">Préparation audit ISO 45001 en 2 heures au lieu de 3 semaines. Vision consolidée de votre conformité réglementaire globale.</p>
+                    <p class="module-card__metric">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23,6 13.5,15.5 8.5,10.5 1,18"/></svg>
+                        Audit ISO en 2h
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════ BENEFITS ═══════════════ -->
+    <section class="benefits" id="avantages">
+        <div class="container benefits__content">
+            <div class="reveal">
+                <p class="section-label">Pourquoi ALVEA</p>
+                <h2 class="section-title">Des résultats mesurables dès le premier mois</h2>
+                <p class="section-subtitle" style="margin-bottom: 40px;">ALVEA transforme vos obligations réglementaires en avantage compétitif.</p>
+
+                <div class="benefits__list">
+                    <div class="benefit">
+                        <div class="benefit__icon">⚡</div>
+                        <div>
+                            <h4 class="benefit__title">Déploiement en 48 heures</h4>
+                            <p class="benefit__desc">Aucune installation complexe. Interface Telegram familière, prise en main immédiate par les équipes terrain sans formation longue.</p>
+                        </div>
+                    </div>
+                    <div class="benefit">
+                        <div class="benefit__icon">🤖</div>
+                        <div>
+                            <h4 class="benefit__title">IA multimodale avancée</h4>
+                            <p class="benefit__desc">Analyse automatique de photos, messages vocaux et textes. L'IA extrait les données structurées et complète les champs manquants.</p>
+                        </div>
+                    </div>
+                    <div class="benefit">
+                        <div class="benefit__icon">📱</div>
+                        <div>
+                            <h4 class="benefit__title">Accessible à tous</h4>
+                            <p class="benefit__desc">PME, ETI ou grands groupes. Tarification modulaire adaptée à votre taille et vos besoins. Pas de coût d'infrastructure caché.</p>
+                        </div>
+                    </div>
+                    <div class="benefit">
+                        <div class="benefit__icon">🔒</div>
+                        <div>
+                            <h4 class="benefit__title">Conformité garantie</h4>
+                            <p class="benefit__desc">Rapports aux normes françaises et internationales. DUERP, ISO 45001, traçabilité complète pour vos audits réglementaires.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="benefits__visual reveal reveal-delay-2">
+                <div class="benefits__stats-card">
+                    <div class="stats-row">
+                        <div>
+                            <div class="stats-row__label">Temps de déclaration</div>
+                        </div>
+                        <div>
+                            <div class="stats-row__value">60 sec</div>
+                            <div class="stats-row__sub">vs 45 min en moyenne</div>
+                        </div>
+                    </div>
+                    <div class="stats-row">
+                        <div>
+                            <div class="stats-row__label">Préparation audit ISO</div>
+                        </div>
+                        <div>
+                            <div class="stats-row__value">2 heures</div>
+                            <div class="stats-row__sub">vs 3 semaines avant</div>
+                        </div>
+                    </div>
+                    <div class="stats-row">
+                        <div>
+                            <div class="stats-row__label">Validation permis</div>
+                        </div>
+                        <div>
+                            <div class="stats-row__value">4 heures</div>
+                            <div class="stats-row__sub">vs 2 jours avant</div>
+                        </div>
+                    </div>
+                    <div class="stats-row">
+                        <div>
+                            <div class="stats-row__label">Taux de conformité</div>
+                        </div>
+                        <div>
+                            <div class="stats-row__value">97%</div>
+                            <div class="stats-row__sub">en moyenne après 3 mois</div>
+                        </div>
+                    </div>
+                    <div class="stats-row">
+                        <div>
+                            <div class="stats-row__label">ROI moyen</div>
+                        </div>
+                        <div>
+                            <div class="stats-row__value">x4.2</div>
+                            <div class="stats-row__sub">sur 12 mois</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════ AUDIENCE ═══════════════ -->
+    <section class="audience" id="audience">
+        <div class="container">
+            <div class="audience__header reveal">
+                <p class="section-label">Pour qui</p>
+                <h2 class="section-title">Conçu pour chaque taille d'entreprise</h2>
+                <p class="section-subtitle">ALVEA s'adapte à vos besoins, que vous soyez une PME en croissance ou un grand groupe industriel international.</p>
+            </div>
+
+            <div class="audience__grid">
+                <div class="audience-card reveal reveal-delay-1">
+                    <div class="audience-card__icon">🏭</div>
+                    <h3 class="audience-card__title">PME Industrielles</h3>
+                    <p class="audience-card__size">10 – 250 salariés</p>
+                    <p class="audience-card__desc">Mettez en conformité votre entreprise sans recruter de QHSE dédié. ALVEA Safety+ automatise votre DUERP et vos déclarations d'incidents.</p>
+                </div>
+
+                <div class="audience-card reveal reveal-delay-2">
+                    <div class="audience-card__icon">🏗️</div>
+                    <h3 class="audience-card__title">ETI & Groupes Midcap</h3>
+                    <p class="audience-card__size">250 – 5 000 salariés</p>
+                    <p class="audience-card__desc">Consolidez vos données HSE multi-sites. Pilotez vos KPI sécurité en temps réel et préparez vos audits ISO 45001 sereinement.</p>
+                </div>
+
+                <div class="audience-card reveal reveal-delay-3">
+                    <div class="audience-card__icon">🌍</div>
+                    <h3 class="audience-card__title">Grands Groupes</h3>
+                    <p class="audience-card__size">5 000+ salariés</p>
+                    <p class="audience-card__desc">Déployez une solution unifiée à l'échelle internationale. Intégration SAP/ERP, reporting consolidé groupe, conformité multi-juridictions.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════ CTA ═══════════════ -->
+    <section class="cta" id="demo">
+        <div class="container">
+            <div class="cta__card reveal">
+                <h2 class="cta__title">Prêt à digitaliser votre HSE ?</h2>
+                <p class="cta__desc">Rejoignez les entreprises qui transforment leurs obligations réglementaires en avantage compétitif.</p>
+                <div class="cta__actions">
+                    <a href="#" class="btn btn--primary btn--large">
+                        Demander une démo gratuite
+                        <span class="btn__arrow">→</span>
+                    </a>
+                    <a href="#" class="btn btn--secondary btn--large">
+                        Voir la documentation
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════ FOOTER ═══════════════ -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__inner">
+                <div class="footer__brand">
+                    <svg width="28" height="28" viewBox="0 0 40 40" fill="none">
+                        <path d="M20 8L30.39 14V26L20 32L9.61 26V14L20 8Z" fill="#10B981" opacity="0.3"/>
+                        <path d="M20 14L24.33 16.5V21.5L20 24L15.67 21.5V16.5L20 14Z" fill="#10B981"/>
+                    </svg>
+                    <span class="footer__brand-text">ALVEA</span>
+                </div>
+
+                <ul class="footer__links">
+                    <li><a href="#">Solution</a></li>
+                    <li><a href="#">Modules</a></li>
+                    <li><a href="#">Tarifs</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Contact</a></li>
+                    <li><a href="#">Mentions légales</a></li>
+                </ul>
+            </div>
+
+            <p class="footer__copy">
+                © 2025 ALVEA — Une solution <a href="#">NEXORA</a> · L'excellence opérationnelle, simple et accessible.
+            </p>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
