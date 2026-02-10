@@ -157,6 +157,9 @@ img { max-width: 100%; }
 
 .btn__arrow {
     transition: transform 0.3s var(--ease-out);
+    font-size: 20px;
+    vertical-align: middle;
+    margin-left: 4px;
 }
 .btn:hover .btn__arrow {
     transform: translateX(4px);
@@ -1429,13 +1432,24 @@ img { max-width: 100%; }
     align-items: center;
     padding: 20px 0;
     border-bottom: 1px solid rgba(0,0,0,0.05);
+    gap: 16px;
 }
 
 .stats-row:last-child { border-bottom: none; }
 
+.stats-row__left {
+    flex: 1;
+}
+
+.stats-row__right {
+    text-align: right;
+    flex-shrink: 0;
+}
+
 .stats-row__label {
     font-size: 0.9rem;
     color: var(--text-secondary);
+    font-weight: 500;
 }
 
 .stats-row__value {
@@ -1443,6 +1457,7 @@ img { max-width: 100%; }
     font-size: 1.4rem;
     font-weight: 800;
     color: var(--emerald);
+    line-height: 1.2;
 }
 
 .stats-row__sub {
