@@ -831,6 +831,259 @@ img { max-width: 100%; }
 }
 
 /* ═══════════════════════════════════════
+   APPROACH / BIRD PYRAMID SUMMARY
+   ═══════════════════════════════════════ */
+.approach {
+    padding: var(--section-pad) 0;
+    background: var(--bg-section);
+    position: relative;
+}
+
+.approach__content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: center;
+}
+
+.approach__text .section-subtitle {
+    max-width: 480px;
+}
+
+.approach__insight {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    line-height: 1.8;
+    margin-bottom: 16px;
+}
+
+.approach__conclusion {
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    font-weight: 500;
+    line-height: 1.7;
+    margin-bottom: 32px;
+}
+
+/* Mini pyramid visual */
+.approach__pyramid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.approach__tier {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px;
+    border-radius: 10px;
+    color: white;
+    font-family: 'Outfit', sans-serif;
+    transition: transform 0.3s var(--ease-out);
+}
+
+.approach__tier:hover {
+    transform: scale(1.03);
+}
+
+.approach__tier--1 {
+    width: 45%;
+    background: #1A1A2E;
+}
+.approach__tier--2 {
+    width: 55%;
+    background: #2D2D3F;
+}
+.approach__tier--3 {
+    width: 65%;
+    background: #DC2626;
+}
+.approach__tier--4 {
+    width: 78%;
+    background: #EA580C;
+}
+.approach__tier--5 {
+    width: 90%;
+    background: var(--emerald);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+    animation: alveaPulse 3s ease-in-out infinite;
+}
+.approach__tier--6 {
+    width: 100%;
+    background: #0D9488;
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+    animation: alveaPulse 3s ease-in-out infinite 0.5s;
+}
+
+.approach__tier-label {
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+
+.approach__tier-ratio {
+    font-size: 1rem;
+    font-weight: 800;
+    opacity: 0.85;
+}
+
+.approach__tier-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 85%;
+    padding: 8px 0;
+    margin: 6px 0;
+}
+
+.approach__tier-divider span {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--emerald-dark);
+    background: var(--emerald-glow);
+    padding: 4px 14px;
+    border-radius: 100px;
+    border: 1px solid rgba(16,185,129,0.2);
+    letter-spacing: 0.04em;
+}
+
+/* ═══════════════════════════════════════
+   FOUNDERS SECTION
+   ═══════════════════════════════════════ */
+.founders {
+    padding: var(--section-pad) 0;
+    background: var(--bg-section);
+}
+
+.founders__header {
+    text-align: center;
+    margin-bottom: 56px;
+}
+
+.founders__header .section-subtitle {
+    margin: 0 auto;
+}
+
+.founders__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 32px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.founder-card {
+    background: var(--white-pure);
+    border: 1px solid rgba(0,0,0,0.06);
+    border-radius: 20px;
+    padding: 40px 32px;
+    text-align: center;
+    transition: all 0.4s var(--ease-out);
+}
+
+.founder-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.06);
+    border-color: rgba(16,185,129,0.15);
+}
+
+.founder-card__avatar {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: white;
+    background: linear-gradient(135deg, var(--emerald), var(--emerald-dark));
+}
+
+.founder-card:nth-child(2) .founder-card__avatar {
+    background: linear-gradient(135deg, var(--navy-mid), var(--navy));
+}
+
+.founder-card__name {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.founder-card__role {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--emerald);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+}
+
+.founder-card__bio {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+}
+
+.founders__vision {
+    max-width: 800px;
+    margin: 40px auto 0;
+}
+
+.founders__vision-card {
+    background: var(--navy);
+    border-radius: 20px;
+    padding: 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.founders__vision-card::before {
+    content: '';
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    background: var(--emerald);
+    filter: blur(120px);
+    opacity: 0.08;
+    top: -150px;
+    right: -100px;
+}
+
+.founders__vision-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 16px;
+    position: relative;
+    z-index: 1;
+}
+
+.founders__vision-text {
+    font-size: 0.95rem;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.8;
+    max-width: 600px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+.founders__vision-text strong {
+    color: var(--emerald-light);
+}
+
+/* ═══════════════════════════════════════
    SOLUTION / PRODUCT SECTION
    ═══════════════════════════════════════ */
 .solution {
@@ -2117,6 +2370,8 @@ img { max-width: 100%; }
     .audience__grid { grid-template-columns: 1fr; }
     .contact__content { grid-template-columns: 1fr; }
     .bird-solution__grid { grid-template-columns: 1fr; }
+    .approach__content { grid-template-columns: 1fr; gap: 48px; }
+    .founders__grid { grid-template-columns: 1fr; max-width: 400px; }
 }
 
 @media (max-width: 768px) {
@@ -2134,6 +2389,14 @@ img { max-width: 100%; }
     .module-card { padding: 28px 24px; }
     .footer__inner { flex-direction: column; text-align: center; }
     .footer__links { flex-wrap: wrap; justify-content: center; }
+
+    /* Approach mobile */
+    .approach__tier-label { font-size: 0.72rem; }
+    .approach__tier-ratio { font-size: 0.85rem; }
+    .approach__tier { padding: 10px 16px; }
+
+    /* Founders mobile */
+    .founders__vision-card { padding: 28px 24px; }
 
     /* Bird pyramid mobile */
     .bird-hero { padding: 110px 0 48px; }
