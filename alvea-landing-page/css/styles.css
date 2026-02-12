@@ -1364,6 +1364,97 @@ img { max-width: 100%; }
 }
 
 /* ═══════════════════════════════════════
+   AUDITS SECTION
+   ═══════════════════════════════════════ */
+.audits {
+    padding: var(--section-pad) 0;
+    background: var(--navy);
+    position: relative;
+    overflow: hidden;
+}
+
+.audits__content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: center;
+}
+
+.audits__desc {
+    font-size: 0.95rem;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.8;
+    margin-bottom: 32px;
+}
+
+.audits__stats {
+    display: flex;
+    gap: 32px;
+}
+
+.audits__stat {
+    text-align: center;
+}
+
+.audits__stat-number {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--emerald-light);
+    line-height: 1.2;
+}
+
+.audits__stat-label {
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.45);
+    margin-top: 4px;
+}
+
+/* Audit catalog tags */
+.audits__catalog {
+    position: relative;
+}
+
+.audits__grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.audit-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 18px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    color: rgba(255,255,255,0.8);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 500;
+    transition: all 0.3s var(--ease-out);
+}
+
+.audit-tag:hover {
+    background: rgba(16,185,129,0.12);
+    border-color: rgba(16,185,129,0.25);
+    color: var(--emerald-light);
+    transform: translateY(-2px);
+}
+
+.audit-tag__icon {
+    font-size: 1rem;
+}
+
+.audits__catalog-more {
+    margin-top: 16px;
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.35);
+    font-style: italic;
+}
+
+/* ═══════════════════════════════════════
    BENEFITS SECTION
    ═══════════════════════════════════════ */
 .benefits {
@@ -2386,6 +2477,7 @@ img { max-width: 100%; }
     .contact__content { grid-template-columns: 1fr; }
     .bird-solution__grid { grid-template-columns: 1fr; }
     .approach__content { grid-template-columns: 1fr; gap: 48px; }
+    .audits__content { grid-template-columns: 1fr; gap: 40px; }
     .founders__grid { grid-template-columns: 1fr; max-width: 400px; }
 }
 
@@ -2402,6 +2494,8 @@ img { max-width: 100%; }
     .proof-bar__logos { gap: 24px; }
     .mockup__stats { grid-template-columns: 1fr; }
     .module-card { padding: 28px 24px; }
+    .audits__stats { gap: 20px; }
+    .audits__stat-number { font-size: 1.3rem; }
     .footer__inner { flex-direction: column; text-align: center; }
     .footer__links { flex-wrap: wrap; justify-content: center; }
 
