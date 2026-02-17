@@ -11,7 +11,7 @@ services:
       - proxy
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.fintrack.rule=Host(`fintrack.srv874841.hstgr.cloud`)"
+      - "traefik.http.routers.fintrack.rule=Host(`fintrack.ethlab.fr`)"
       - "traefik.http.routers.fintrack.entrypoints=websecure"
       - "traefik.http.routers.fintrack.tls.certresolver=mytlschallenge"
       - "traefik.http.services.fintrack.loadbalancer.server.port=3000"
