@@ -123,6 +123,35 @@ export async function getCategories(dbId: string): Promise<string[]> {
   return ["Autre"];
 }
 
+export async function getBalanceBefore(dbId: string, year: number): Promise<{ realized: number; projected: number }> {
+  let realized = 0, projected = 0;
+  let cursor: string | undefined = undefined;
+
+  do {
+    const response: any = await notion.databases.query({
+      database_id: dbId,
+      start_cursor: cursor,
+      filter: {
+        property: "Date",
+        date: { before: `${year}-01-01` },
+      },
+    });
+
+    for (const page of response.results) {
+      const card = parseNotionPage(page);
+      if (card) {
+        const sign = card.type === "income" ? 1 : -1;
+        projected += sign * card.amount;
+        if (card.done) realized += sign * card.amount;
+      }
+    }
+
+    cursor = response.has_more ? response.next_cursor : undefined;
+  } while (cursor);
+
+  return { realized, projected };
+}
+
 export async function getStartBalance(dbId: string): Promise<number> {
   const db = await notion.databases.retrieve({ database_id: dbId });
   const desc = (db as any).description;

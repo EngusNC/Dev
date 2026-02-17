@@ -77,6 +77,11 @@ const api = {
     if (!r.ok) throw new Error((await r.json()).error || "Erreur API");
     return r.json();
   },
+  async getBalanceBefore(dbId: string, year: number) {
+    const r = await fetch(`/api/balance?db=${dbId}&year=${year}`);
+    if (!r.ok) throw new Error((await r.json()).error || "Erreur API");
+    return r.json();
+  },
 };
 
 // ─── Types ───────────────────────────────────────────────────
@@ -111,10 +116,12 @@ export default function FinFlow({ dbId }: FinFlowProps) {
   const [dropTarget, setDropTarget] = useState<string | null>(null);
   const [editBal, setEditBal] = useState(false);
   const [balIn, setBalIn] = useState("");
-  const [form, setForm] = useState({type:"expense" as "income"|"expense",label:"",amount:"",category:"Autre"});
+  const [form, setForm] = useState({type:"expense" as "income"|"expense",label:"",amount:"",category:"Autre",date:""});
   const [dark, setDark] = useState(true);
   const [editingCard, setEditingCard] = useState<string | null>(null);
   const [editForm, setEditForm] = useState({label:"",amount:""});
+  const [compact, setCompact] = useState(false);
+  const [carryOver, setCarryOver] = useState({ realized: 0, projected: 0 });
   const scrollRef = useRef<HTMLDivElement>(null);
   const t = dark ? themes.dark : themes.light;
 
@@ -124,11 +131,13 @@ export default function FinFlow({ dbId }: FinFlowProps) {
     try {
       setError(null);
       setSyncing(true);
-      const [fetchedCards, cats] = await Promise.all([
+      const [fetchedCards, cats, carry] = await Promise.all([
         api.getCards(dbId, targetYear),
         api.getCategories(dbId),
+        api.getBalanceBefore(dbId, targetYear),
       ]);
       setCards(fetchedCards);
+      setCarryOver(carry);
       if (cats.length > 0) setCategories(cats);
     } catch (e: any) {
       setError(e.message);
@@ -155,12 +164,15 @@ export default function FinFlow({ dbId }: FinFlowProps) {
     }
   }, [loading]);
 
-  // Persist dark mode preference in localStorage
+  // Persist preferences in localStorage
   useEffect(() => {
     const saved = localStorage.getItem("finflow-dark");
     if (saved !== null) setDark(saved === "true");
+    const savedCompact = localStorage.getItem("finflow-compact");
+    if (savedCompact !== null) setCompact(savedCompact === "true");
   }, []);
   useEffect(() => { localStorage.setItem("finflow-dark", String(dark)); }, [dark]);
+  useEffect(() => { localStorage.setItem("finflow-compact", String(compact)); }, [compact]);
 
   // ─── CRUD with optimistic updates ──────────────────────────
   const addCard = async (data: { month: number; day: number; type: "income"|"expense"; label: string; amount: number; category: string }) => {
@@ -178,7 +190,12 @@ export default function FinFlow({ dbId }: FinFlowProps) {
   };
 
   const updateCardData = async (id: string, data: Partial<Card>) => {
-    setCards(prev => prev.map(c => c.id === id ? { ...c, ...data } : c));
+    let localUpdate = { ...data };
+    if (data.date) {
+      const [y, m, d] = data.date.split("-").map(Number);
+      localUpdate = { ...localUpdate, year: y, month: m - 1, day: d };
+    }
+    setCards(prev => prev.map(c => c.id === id ? { ...c, ...localUpdate } : c));
     try {
       await api.updateCard(id, data);
     } catch (e: any) {
@@ -216,7 +233,7 @@ export default function FinFlow({ dbId }: FinFlowProps) {
   };
 
   // ─── Compute balances ──────────────────────────────────────
-  let runReal = startBalance, runProj = startBalance;
+  let runReal = startBalance + carryOver.realized, runProj = startBalance + carryOver.projected;
   const md = Array.from({ length: 12 }, (_, m) => {
     const mc = cards.filter(c => c.year === year && c.month === m);
     const realInc = mc.filter(c => c.type === "income" && c.done).reduce((s, c) => s + c.amount, 0);
@@ -236,14 +253,20 @@ export default function FinFlow({ dbId }: FinFlowProps) {
   const onDr = (e: React.DragEvent, m: number, d: number) => { e.preventDefault(); if (dragCard) moveCardTo(dragCard, m, d); setDragCard(null); setDropTarget(null); };
 
   // ─── Modals ─────────────────────────────────────────────────
-  const openAdd = (m: number, d: number) => { setForm({ type: "expense", label: "", amount: "", category: categories[0] || "Autre" }); setModal({ mode: "add", month: m, day: d }); };
-  const openEdit = (card: Card) => { setForm({ type: card.type, label: card.label, amount: card.amount.toString(), category: card.category || "Autre" }); setModal({ mode: "edit", card }); };
+  const openAdd = (m: number, d: number) => { setForm({ type: "expense", label: "", amount: "", category: categories[0] || "Autre", date: toDateStr(year, m, d) }); setModal({ mode: "add", month: m, day: d }); };
+  const openEdit = (card: Card) => { setForm({ type: card.type, label: card.label, amount: card.amount.toString(), category: card.category || "Autre", date: card.date }); setModal({ mode: "edit", card }); };
   const openDay = (m: number, d: number) => setModal({ mode: "day", month: m, day: d });
 
   const saveForm = () => {
     const amt = parseFloat(form.amount); if (!form.label || isNaN(amt) || amt <= 0) return;
-    if (modal.mode === "add") addCard({ month: modal.month, day: modal.day, type: form.type, label: form.label, amount: amt, category: form.category });
-    else if (modal.mode === "edit") updateCardData(modal.card.id, { type: form.type, label: form.label, amount: amt, category: form.category });
+    if (modal.mode === "add") {
+      const [, mm, dd] = form.date.split("-").map(Number);
+      addCard({ month: mm - 1, day: dd, type: form.type, label: form.label, amount: amt, category: form.category });
+    } else if (modal.mode === "edit") {
+      const updates: Partial<Card> = { type: form.type, label: form.label, amount: amt, category: form.category };
+      if (form.date && form.date !== modal.card.date) updates.date = form.date;
+      updateCardData(modal.card.id, updates);
+    }
     setModal(null);
   };
 
@@ -310,6 +333,9 @@ export default function FinFlow({ dbId }: FinFlowProps) {
               <span style={{ color: t.dim }}>Réalisé <span style={{ color: lastReal >= 0 ? G : R, fontWeight: 700 }}>{lastReal >= 0 ? "+" : ""}{fmtF(lastReal)} €</span></span>
               <span style={{ color: t.dim }}>Projeté <span style={{ color: lastProj >= 0 ? G : R, fontWeight: 700 }}>{lastProj >= 0 ? "+" : ""}{fmtF(lastProj)} €</span></span>
             </div>
+            <button onClick={() => setCompact(!compact)} title={compact ? "Vue détaillée" : "Vue synthétique"} style={{ background: compact ? t.togAct : t.togBg, border: `1px solid ${t.border}`, borderRadius: 6, padding: "4px 8px", cursor: "pointer", fontSize: 11, color: compact ? t.white : t.dim, lineHeight: 1, fontWeight: compact ? 600 : 400 }}>
+              {compact ? "≡ Mois" : "≡ Jours"}
+            </button>
             <button onClick={() => loadData()} title="Rafraîchir depuis Notion" style={{ background: t.togBg, border: `1px solid ${t.border}`, borderRadius: 6, padding: "4px 8px", cursor: "pointer", fontSize: 12, color: t.dim, lineHeight: 1 }}>
               ↻
             </button>
@@ -351,76 +377,127 @@ export default function FinFlow({ dbId }: FinFlowProps) {
                   </div>
                 </div>
 
-                {/* Day rows */}
-                {Array.from({ length: 31 }, (_, i) => {
-                  const d = i + 1;
-                  if (d > days) return <div key={d} style={{ height: ROW_H, borderBottom: `1px solid ${t.border}`, opacity: 0.1, background: t.surface }} />;
-                  const dw = dow(year, mi, d); const isWe = dw >= 5;
-                  const dc = cards.filter(c => c.year === year && c.month === mi && c.day === d);
-                  const isDrop = dropTarget === `${mi}-${d}`;
-                  const visibleMax = 2; const hidden = dc.length - visibleMax;
-                  const isHovered = hoveredCell === `${mi}-${d}`;
-                  const showAll = isHovered && dc.length > 1;
-                  const displayCards = showAll ? dc : dc.slice(0, visibleMax);
+                {/* Day rows / Compact view */}
+                {compact ? (
+                  <div style={{ flex: 1, overflow: "auto", padding: "4px 6px", display: "flex", flexDirection: "column", gap: 2 }}>
+                    {(() => {
+                      const mc = cards.filter(c => c.year === year && c.month === mi).sort((a, b) => a.day - b.day);
+                      const incTotal = mc.filter(c => c.type === "income").reduce((s, c) => s + c.amount, 0);
+                      const expTotal = mc.filter(c => c.type === "expense").reduce((s, c) => s + c.amount, 0);
+                      return (
+                        <>
+                          {mc.length === 0 && (
+                            <div style={{ textAlign: "center", padding: "20px 0", color: t.dim, fontSize: 11 }}>Aucune opération</div>
+                          )}
+                          {mc.map(c => {
+                            const isDone = c.done;
+                            return (
+                              <div key={c.id} draggable
+                                onDragStart={e => { e.stopPropagation(); onDS(e, c.id); }}
+                                onClick={e => { e.stopPropagation(); openEdit(c); }}
+                                style={{
+                                  display: "flex", alignItems: "center", gap: 4,
+                                  padding: "5px 6px", borderRadius: 6, cursor: "pointer", flexShrink: 0,
+                                  background: c.type === "income" ? (isDone ? t.cardIncBgDone : t.cardIncBg) : (isDone ? t.cardExpBgDone : t.cardExpBg),
+                                  borderLeft: `3px solid ${c.type === "income" ? G : R}`,
+                                  opacity: isDone ? 1 : 0.7,
+                                }}>
+                                <span style={{ fontSize: 9, color: t.dim, minWidth: 16, textAlign: "right", fontWeight: 500 }}>{c.day}</span>
+                                <button onClick={e => { e.stopPropagation(); toggleDone(c.id); }}
+                                  style={{ width: 14, height: 14, borderRadius: 3, border: `1.5px solid ${c.type === "income" ? G : R}`, background: isDone ? (c.type === "income" ? G : R) : "transparent", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, padding: 0, fontSize: 8, color: "#fff", lineHeight: 1 }}>
+                                  {isDone && "✓"}
+                                </button>
+                                <span style={{ fontSize: 11, color: t.text, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", flex: 1 }}>{c.label}</span>
+                                <span style={{ fontSize: 10, fontWeight: 700, color: c.type === "income" ? G : R, flexShrink: 0 }}>
+                                  {c.type === "income" ? "+" : "-"}{fmt(c.amount)}
+                                </span>
+                              </div>
+                            );
+                          })}
+                          {/* Month summary */}
+                          <div style={{ marginTop: "auto", padding: "6px 4px 2px", borderTop: `1px solid ${t.border}`, display: "flex", justifyContent: "space-between", fontSize: 10 }}>
+                            <span style={{ color: G }}>+{fmt(incTotal)}</span>
+                            <span style={{ color: R }}>-{fmt(expTotal)}</span>
+                          </div>
+                          {/* Add button */}
+                          <button onClick={() => openAdd(mi, 1)} style={{ width: "100%", padding: "5px 0", background: t.togBg, border: `1px dashed ${t.border}`, borderRadius: 6, color: t.dim, cursor: "pointer", fontSize: 11, marginTop: 2 }}>
+                            + Ajouter
+                          </button>
+                        </>
+                      );
+                    })()}
+                  </div>
+                ) : (
+                  Array.from({ length: 31 }, (_, i) => {
+                    const d = i + 1;
+                    if (d > days) return <div key={d} style={{ height: ROW_H, borderBottom: `1px solid ${t.border}`, opacity: 0.1, background: t.surface }} />;
+                    const dw = dow(year, mi, d); const isWe = dw >= 5;
+                    const dc = cards.filter(c => c.year === year && c.month === mi && c.day === d);
+                    const isDrop = dropTarget === `${mi}-${d}`;
+                    const visibleMax = 2; const hidden = dc.length - visibleMax;
+                    const isHovered = hoveredCell === `${mi}-${d}`;
+                    const showAll = isHovered && dc.length > 1;
+                    const displayCards = showAll ? dc : dc.slice(0, visibleMax);
 
-                  return (
-                    <div key={d} onClick={() => openDay(mi, d)}
-                      onDragOver={e => onDO(e, mi, d)} onDragLeave={onDL} onDrop={e => onDr(e, mi, d)}
-                      onMouseEnter={(e) => onCellEnter(e, mi, d, dc)} onMouseLeave={onCellLeave}
-                      style={{
-                        height: ROW_H, padding: "3px 6px", borderBottom: `1px solid ${t.border}`,
-                        cursor: "pointer", boxSizing: "border-box", position: "relative",
-                        background: isDrop ? t.dropBg : isWe ? t.weBg : "transparent",
-                        display: "flex", flexDirection: "column", overflow: "hidden",
-                      }}>
-                      <div style={{ display: "flex", alignItems: "center", gap: 4, flexShrink: 0, marginBottom: 1 }}>
-                        <span style={{ fontSize: 9, color: isWe ? t.weText : t.muted, fontWeight: 500, minWidth: 20 }}>{DAYS_L[dw]}</span>
-                        <span style={{ fontSize: 11, fontWeight: dc.length > 0 ? 600 : 400, color: dc.length > 0 ? t.white : t.muted }}>{d}</span>
-                        {hidden > 0 && !showAll && <span style={{ fontSize: 8, color: t.dim, marginLeft: "auto", background: t.togBg, borderRadius: 3, padding: "0 3px" }}>+{hidden}</span>}
+                    return (
+                      <div key={d} onClick={() => openDay(mi, d)}
+                        onDragOver={e => onDO(e, mi, d)} onDragLeave={onDL} onDrop={e => onDr(e, mi, d)}
+                        onMouseEnter={(e) => onCellEnter(e, mi, d, dc)} onMouseLeave={onCellLeave}
+                        style={{
+                          height: ROW_H, padding: "3px 6px", borderBottom: `1px solid ${t.border}`,
+                          cursor: "pointer", boxSizing: "border-box", position: "relative",
+                          background: isDrop ? t.dropBg : isWe ? t.weBg : "transparent",
+                          display: "flex", flexDirection: "column", overflow: "hidden",
+                        }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 4, flexShrink: 0, marginBottom: 1 }}>
+                          <span style={{ fontSize: 9, color: isWe ? t.weText : t.muted, fontWeight: 500, minWidth: 20 }}>{DAYS_L[dw]}</span>
+                          <span style={{ fontSize: 11, fontWeight: dc.length > 0 ? 600 : 400, color: dc.length > 0 ? t.white : t.muted }}>{d}</span>
+                          {hidden > 0 && !showAll && <span style={{ fontSize: 8, color: t.dim, marginLeft: "auto", background: t.togBg, borderRadius: 3, padding: "0 3px" }}>+{hidden}</span>}
+                        </div>
+                        <div style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column", gap: 1 }}>
+                          {displayCards.slice(0, visibleMax).map(c => {
+                            const isDone = c.done;
+                            const isEditing = editingCard === c.id;
+
+                            if (isEditing) return (
+                              <div key={c.id} onClick={e => e.stopPropagation()} style={{ display: "flex", gap: 2, alignItems: "center", padding: "1px 3px", borderRadius: 4, background: c.type === "income" ? (isDone ? t.cardIncBgDone : t.cardIncBg) : (isDone ? t.cardExpBgDone : t.cardExpBg), borderLeft: `2px solid ${c.type === "income" ? G : R}` }}>
+                                <input autoFocus value={editForm.label} onChange={e => setEditForm(f => ({ ...f, label: e.target.value }))}
+                                  onKeyDown={e => { if (e.key === "Enter") saveInlineEdit(c.id); if (e.key === "Escape") setEditingCard(null); }}
+                                  style={{ flex: 1, fontSize: 10, padding: "1px 3px", background: "transparent", border: "none", color: t.white, outline: "none", minWidth: 0 }} />
+                                <input value={editForm.amount} onChange={e => setEditForm(f => ({ ...f, amount: e.target.value }))}
+                                  onKeyDown={e => { if (e.key === "Enter") saveInlineEdit(c.id); if (e.key === "Escape") setEditingCard(null); }}
+                                  style={{ width: 45, fontSize: 10, padding: "1px 3px", background: "transparent", border: "none", color: c.type === "income" ? G : R, outline: "none", textAlign: "right", fontWeight: 700 }} />
+                              </div>
+                            );
+
+                            return (
+                              <div key={c.id} draggable
+                                onDragStart={e => { e.stopPropagation(); onDS(e, c.id); }}
+                                onClick={e => e.stopPropagation()}
+                                onDoubleClick={e => startInlineEdit(e, c)}
+                                style={{
+                                  display: "flex", alignItems: "center", gap: 3,
+                                  padding: "2px 4px", borderRadius: 4, cursor: "grab", flexShrink: 0,
+                                  background: c.type === "income" ? (isDone ? t.cardIncBgDone : t.cardIncBg) : (isDone ? t.cardExpBgDone : t.cardExpBg),
+                                  borderLeft: `2px solid ${c.type === "income" ? G : R}`,
+                                  opacity: isDone ? 1 : 0.7,
+                                }}>
+                                <button onClick={e => { e.stopPropagation(); toggleDone(c.id); }}
+                                  style={{ width: 13, height: 13, borderRadius: 3, border: `1.5px solid ${c.type === "income" ? G : R}`, background: isDone ? (c.type === "income" ? G : R) : "transparent", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, padding: 0, fontSize: 8, color: "#fff", lineHeight: 1 }}>
+                                  {isDone && "✓"}
+                                </button>
+                                <span style={{ fontSize: 10, color: t.text, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", flex: 1 }}>{c.label}</span>
+                                <span style={{ fontSize: 9, fontWeight: 700, color: c.type === "income" ? G : R, flexShrink: 0 }}>
+                                  {c.type === "income" ? "+" : "-"}{fmt(c.amount)}
+                                </span>
+                              </div>
+                            );
+                          })}
+                        </div>
                       </div>
-                      <div style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column", gap: 1 }}>
-                        {displayCards.slice(0, visibleMax).map(c => {
-                          const isDone = c.done;
-                          const isEditing = editingCard === c.id;
-
-                          if (isEditing) return (
-                            <div key={c.id} onClick={e => e.stopPropagation()} style={{ display: "flex", gap: 2, alignItems: "center", padding: "1px 3px", borderRadius: 4, background: c.type === "income" ? (isDone ? t.cardIncBgDone : t.cardIncBg) : (isDone ? t.cardExpBgDone : t.cardExpBg), borderLeft: `2px solid ${c.type === "income" ? G : R}` }}>
-                              <input autoFocus value={editForm.label} onChange={e => setEditForm(f => ({ ...f, label: e.target.value }))}
-                                onKeyDown={e => { if (e.key === "Enter") saveInlineEdit(c.id); if (e.key === "Escape") setEditingCard(null); }}
-                                style={{ flex: 1, fontSize: 10, padding: "1px 3px", background: "transparent", border: "none", color: t.white, outline: "none", minWidth: 0 }} />
-                              <input value={editForm.amount} onChange={e => setEditForm(f => ({ ...f, amount: e.target.value }))}
-                                onKeyDown={e => { if (e.key === "Enter") saveInlineEdit(c.id); if (e.key === "Escape") setEditingCard(null); }}
-                                style={{ width: 45, fontSize: 10, padding: "1px 3px", background: "transparent", border: "none", color: c.type === "income" ? G : R, outline: "none", textAlign: "right", fontWeight: 700 }} />
-                            </div>
-                          );
-
-                          return (
-                            <div key={c.id} draggable
-                              onDragStart={e => { e.stopPropagation(); onDS(e, c.id); }}
-                              onClick={e => e.stopPropagation()}
-                              onDoubleClick={e => startInlineEdit(e, c)}
-                              style={{
-                                display: "flex", alignItems: "center", gap: 3,
-                                padding: "2px 4px", borderRadius: 4, cursor: "grab", flexShrink: 0,
-                                background: c.type === "income" ? (isDone ? t.cardIncBgDone : t.cardIncBg) : (isDone ? t.cardExpBgDone : t.cardExpBg),
-                                borderLeft: `2px solid ${c.type === "income" ? G : R}`,
-                                opacity: isDone ? 1 : 0.7,
-                              }}>
-                              <button onClick={e => { e.stopPropagation(); toggleDone(c.id); }}
-                                style={{ width: 13, height: 13, borderRadius: 3, border: `1.5px solid ${c.type === "income" ? G : R}`, background: isDone ? (c.type === "income" ? G : R) : "transparent", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, padding: 0, fontSize: 8, color: "#fff", lineHeight: 1 }}>
-                                {isDone && "✓"}
-                              </button>
-                              <span style={{ fontSize: 10, color: t.text, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", flex: 1 }}>{c.label}</span>
-                              <span style={{ fontSize: 9, fontWeight: 700, color: c.type === "income" ? G : R, flexShrink: 0 }}>
-                                {c.type === "income" ? "+" : "-"}{fmt(c.amount)}
-                              </span>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })
+                )}
               </div>
             );
           })}
@@ -499,9 +576,14 @@ export default function FinFlow({ dbId }: FinFlowProps) {
                     onKeyDown={e => { if (e.key === "Enter") saveForm(); }}
                     style={{ width: "100%", padding: "9px 12px", background: t.inputBg, border: `1px solid ${t.inputBd}`, borderRadius: 8, color: t.white, fontSize: 13, marginBottom: 10, outline: "none", boxSizing: "border-box" }} />
                   <select value={form.category} onChange={e => setForm(f => ({ ...f, category: e.target.value }))}
-                    style={{ width: "100%", padding: "9px 12px", background: t.inputBg, border: `1px solid ${t.inputBd}`, borderRadius: 8, color: t.white, fontSize: 12, marginBottom: 14, outline: "none", boxSizing: "border-box" }}>
+                    style={{ width: "100%", padding: "9px 12px", background: t.inputBg, border: `1px solid ${t.inputBd}`, borderRadius: 8, color: t.white, fontSize: 12, marginBottom: 10, outline: "none", boxSizing: "border-box" }}>
                     {categories.map(c => <option key={c} value={c} style={{ background: t.optBg }}>{c}</option>)}
                   </select>
+                  <div style={{ marginBottom: 14 }}>
+                    <label style={{ fontSize: 11, color: t.dim, marginBottom: 4, display: "block" }}>Date</label>
+                    <input type="date" value={form.date} onChange={e => setForm(f => ({ ...f, date: e.target.value }))}
+                      style={{ width: "100%", padding: "9px 12px", background: t.inputBg, border: `1px solid ${t.inputBd}`, borderRadius: 8, color: t.white, fontSize: 12, outline: "none", boxSizing: "border-box", colorScheme: dark ? "dark" : "light" }} />
+                  </div>
                   <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
                     <button onClick={() => setModal(null)} style={{ padding: "8px 16px", background: t.secBg, border: "none", borderRadius: 8, color: t.secCol, cursor: "pointer", fontSize: 12 }}>Annuler</button>
                     <button onClick={saveForm} style={{ padding: "8px 20px", background: "linear-gradient(135deg,#3b82f6,#8b5cf6)", border: "none", borderRadius: 8, color: "#fff", cursor: "pointer", fontSize: 12, fontWeight: 600 }}>
