@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "FinFlow — Suivi financier",
+  title: "Fintrack — Suivi financier",
   description: "Tableau de bord financier connecté à Notion",
+  icons: { icon: "/favicon.svg" },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

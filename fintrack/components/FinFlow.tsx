@@ -12,6 +12,12 @@ function dim(y: number, m: number){return new Date(y,m+1,0).getDate();}
 function dow(y: number, m: number, d: number){return(new Date(y,m,d).getDay()+6)%7;}
 function pad2(n: number){return n.toString().padStart(2,"0");}
 function toDateStr(y: number, m: number, d: number){return `${y}-${pad2(m+1)}-${pad2(d)}`;}
+/** Compute next-month date: same day clamped to target month's length */
+function nextMonthDate(y: number, m: number, d: number): { year: number; month: number; day: number } {
+  const nm = m + 1; const ny = nm > 11 ? y + 1 : y; const nmm = nm > 11 ? 0 : nm;
+  const maxD = dim(ny, nmm);
+  return { year: ny, month: nmm, day: Math.min(d, maxD) };
+}
 
 const G="#34d399",R="#f87171",B="#3b82f6";
 
@@ -98,12 +104,12 @@ interface Card {
   day: number;
 }
 
-interface FinFlowProps {
+interface FintrackProps {
   dbId: string;
 }
 
 // ─── Component ───────────────────────────────────────────────
-export default function FinFlow({ dbId }: FinFlowProps) {
+export default function FinFlow({ dbId }: FintrackProps) {
   const [year, setYear] = useState(new Date().getFullYear());
   const [startBalance, setStartBalance] = useState(0);
   const [cards, setCards] = useState<Card[]>([]);
@@ -282,10 +288,12 @@ export default function FinFlow({ dbId }: FinFlowProps) {
   const [hoveredCell, setHoveredCell] = useState<string | null>(null);
   const [popPos, setPopPos] = useState<any>(null);
   const hoverTimeout = useRef<any>(null);
-  const onCellEnter = (e: React.MouseEvent, mi: number, d: number, dc: Card[]) => { if (dc.length <= 1) return; clearTimeout(hoverTimeout.current); const rect = (e.currentTarget as HTMLElement).getBoundingClientRect(); hoverTimeout.current = setTimeout(() => { setHoveredCell(`${mi}-${d}`); setPopPos({ left: rect.left, top: rect.top, width: rect.width }); }, 180); };
-  const onCellLeave = () => { clearTimeout(hoverTimeout.current); setHoveredCell(null); setPopPos(null); };
+  const popoutRef = useRef<HTMLDivElement>(null);
+  const onCellEnter = (e: React.MouseEvent, mi: number, d: number, dc: Card[]) => { if (dc.length <= 2) return; clearTimeout(hoverTimeout.current); const rect = (e.currentTarget as HTMLElement).getBoundingClientRect(); hoverTimeout.current = setTimeout(() => { setHoveredCell(`${mi}-${d}`); setPopPos({ left: rect.left, top: rect.top, width: rect.width }); }, 180); };
+  const onCellLeave = (e: React.MouseEvent) => { const related = e.relatedTarget as Node | null; if (popoutRef.current?.contains(related)) return; clearTimeout(hoverTimeout.current); setHoveredCell(null); setPopPos(null); };
+  const onPopoutLeave = (e: React.MouseEvent) => { const related = e.relatedTarget as Node | null; if (popoutRef.current?.contains(related)) return; clearTimeout(hoverTimeout.current); setHoveredCell(null); setPopPos(null); };
 
-  const COL_W = 220, ROW_H = 54;
+  const COL_W = 220, ROW_H = 44;
 
   // ─── Loading state ──────────────────────────────────────────
   if (loading) return (
@@ -305,7 +313,7 @@ export default function FinFlow({ dbId }: FinFlowProps) {
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
               <div style={{ width: 8, height: 8, borderRadius: "50%", background: "linear-gradient(135deg,#3b82f6,#8b5cf6)" }} />
-              <span style={{ fontWeight: 700, fontSize: 15, color: t.white, letterSpacing: "-0.02em" }}>FinFlow</span>
+              <span style={{ fontWeight: 700, fontSize: 15, color: t.white, letterSpacing: "-0.02em" }}>Fintrack</span>
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: 2, background: t.togBg, borderRadius: 8, padding: "3px" }}>
               <button onClick={() => setYear(year - 1)} style={{ background: "none", border: "none", color: t.dim, cursor: "pointer", padding: "2px 8px", fontSize: 14 }}>‹</button>
@@ -331,7 +339,7 @@ export default function FinFlow({ dbId }: FinFlowProps) {
             </div>
             <div style={{ display: "flex", gap: 12, fontSize: 11 }}>
               <span style={{ color: t.dim }}>Réalisé <span style={{ color: lastReal >= 0 ? G : R, fontWeight: 700 }}>{lastReal >= 0 ? "+" : ""}{fmtF(lastReal)} €</span></span>
-              <span style={{ color: t.dim }}>Projeté <span style={{ color: lastProj >= 0 ? G : R, fontWeight: 700 }}>{lastProj >= 0 ? "+" : ""}{fmtF(lastProj)} €</span></span>
+              <span style={{ color: t.dim }}>Projeté <span style={{ color: B, fontWeight: 700 }}>{lastProj >= 0 ? "+" : ""}{fmtF(lastProj)} €</span></span>
             </div>
             <button onClick={() => setCompact(!compact)} title={compact ? "Vue détaillée" : "Vue synthétique"} style={{ background: compact ? t.togAct : t.togBg, border: `1px solid ${t.border}`, borderRadius: 6, padding: "4px 8px", cursor: "pointer", fontSize: 11, color: compact ? t.white : t.dim, lineHeight: 1, fontWeight: compact ? 600 : 400 }}>
               {compact ? "≡ Mois" : "≡ Jours"}
@@ -361,7 +369,7 @@ export default function FinFlow({ dbId }: FinFlowProps) {
             return (
               <div key={mi} data-month={mi} style={{ width: COL_W, minWidth: COL_W, borderRight: `1px solid ${t.border}`, flexShrink: 0 }}>
                 {/* Sticky month header */}
-                <div style={{ position: "sticky", top: 0, zIndex: 10, padding: "7px 10px", borderBottom: `1px solid ${t.border}`, background: t.colHdrBg, backdropFilter: "blur(8px)" }}>
+                <div style={{ position: "sticky", top: 0, zIndex: 10, padding: "7px 10px", borderBottom: `1px solid ${t.border}`, background: t.colHdrBg, backdropFilter: "blur(8px)", height: 52, boxSizing: "border-box" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                     <span style={{ fontWeight: 700, fontSize: 13, color: t.white }}>{mName}</span>
                     <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 1 }}>
@@ -369,7 +377,7 @@ export default function FinFlow({ dbId }: FinFlowProps) {
                         {m.realBal >= 0 ? "+" : ""}{fmt(m.realBal)} €
                       </span>
                       {m.projBal !== m.realBal && (
-                        <span style={{ fontSize: 9, color: t.dim, fontStyle: "italic" }}>
+                        <span style={{ fontSize: 9, color: B, fontWeight: 600 }}>
                           proj. {m.projBal >= 0 ? "+" : ""}{fmt(m.projBal)} €
                         </span>
                       )}
@@ -379,7 +387,27 @@ export default function FinFlow({ dbId }: FinFlowProps) {
 
                 {/* Day rows / Compact view */}
                 {compact ? (
-                  <div style={{ flex: 1, overflow: "auto", padding: "4px 6px", display: "flex", flexDirection: "column", gap: 2 }}>
+                  <div
+                    onDragOver={e => { e.preventDefault(); setDropTarget(`compact-${mi}`); }}
+                    onDragLeave={() => setDropTarget(null)}
+                    onDrop={e => {
+                      e.preventDefault();
+                      if (dragCard) {
+                        const card = cards.find(c => c.id === dragCard);
+                        if (card) {
+                          // If dropping on same month, keep same day; otherwise use smart M+1 logic
+                          if (card.month === mi) {
+                            // noop - same month
+                          } else {
+                            const maxD = dim(year, mi);
+                            const newDay = Math.min(card.day, maxD);
+                            moveCardTo(dragCard, mi, newDay);
+                          }
+                        }
+                      }
+                      setDragCard(null); setDropTarget(null);
+                    }}
+                    style={{ flex: 1, overflow: "auto", padding: "4px 6px", display: "flex", flexDirection: "column", gap: 2, background: dropTarget === `compact-${mi}` ? t.dropBg : "transparent", transition: "background 0.15s" }}>
                     {(() => {
                       const mc = cards.filter(c => c.year === year && c.month === mi).sort((a, b) => a.day - b.day);
                       const incTotal = mc.filter(c => c.type === "income").reduce((s, c) => s + c.amount, 0);
@@ -435,9 +463,6 @@ export default function FinFlow({ dbId }: FinFlowProps) {
                     const dc = cards.filter(c => c.year === year && c.month === mi && c.day === d);
                     const isDrop = dropTarget === `${mi}-${d}`;
                     const visibleMax = 2; const hidden = dc.length - visibleMax;
-                    const isHovered = hoveredCell === `${mi}-${d}`;
-                    const showAll = isHovered && dc.length > 1;
-                    const displayCards = showAll ? dc : dc.slice(0, visibleMax);
 
                     return (
                       <div key={d} onClick={() => openDay(mi, d)}
@@ -452,10 +477,10 @@ export default function FinFlow({ dbId }: FinFlowProps) {
                         <div style={{ display: "flex", alignItems: "center", gap: 4, flexShrink: 0, marginBottom: 1 }}>
                           <span style={{ fontSize: 9, color: isWe ? t.weText : t.muted, fontWeight: 500, minWidth: 20 }}>{DAYS_L[dw]}</span>
                           <span style={{ fontSize: 11, fontWeight: dc.length > 0 ? 600 : 400, color: dc.length > 0 ? t.white : t.muted }}>{d}</span>
-                          {hidden > 0 && !showAll && <span style={{ fontSize: 8, color: t.dim, marginLeft: "auto", background: t.togBg, borderRadius: 3, padding: "0 3px" }}>+{hidden}</span>}
+                          {hidden > 0 && <span style={{ fontSize: 8, color: t.dim, marginLeft: "auto", background: t.togBg, borderRadius: 3, padding: "0 3px" }}>+{hidden}</span>}
                         </div>
                         <div style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column", gap: 1 }}>
-                          {displayCards.slice(0, visibleMax).map(c => {
+                          {dc.slice(0, visibleMax).map(c => {
                             const isDone = c.done;
                             const isEditing = editingCard === c.id;
 
@@ -601,10 +626,10 @@ export default function FinFlow({ dbId }: FinFlowProps) {
       {hoveredCell && popPos && (() => {
         const [pmi, pd] = hoveredCell.split("-").map(Number);
         const dc = cards.filter(c => c.year === year && c.month === pmi && c.day === pd);
-        if (dc.length <= 1) return null;
+        if (dc.length <= 2) return null;
         const dw2 = dow(year, pmi, pd); const isWe2 = dw2 >= 5;
         return (
-          <div onMouseEnter={() => clearTimeout(hoverTimeout.current)} onMouseLeave={onCellLeave}
+          <div ref={popoutRef} onMouseEnter={() => clearTimeout(hoverTimeout.current)} onMouseLeave={onPopoutLeave}
             style={{
               position: "fixed", left: popPos.left - 2, top: popPos.top - 2, width: popPos.width + 4, zIndex: 80,
               padding: "5px 8px 8px", borderRadius: 8,
